@@ -48,7 +48,7 @@ fetch("metadata/metadata.json")
             if (!found) {
               const optionDiv = document.createElement("div")
               const checkbox = document.createElement("input")
-              const checkboxId = `${attribute.trait_info.trait} checkbox`
+              const checkboxId = `${attribute.trait_category} ${attribute.trait_info.trait} checkbox`
 
               optionDiv.classList = "trait"
               checkbox.type = "checkbox"
@@ -72,18 +72,20 @@ fetch("metadata/metadata.json")
                 const allCheckboxes = document.querySelectorAll("input[type=checkbox]")
                 for (const cb of allCheckboxes) {
                   if (cb.checked) {
-                    selectedTraits.push(cb.value)
+                    selectedTraits.push({
+                      trait: cb.value,
+                      trait_category: cb.dataset.category,
+                    })
                   }
                 }
               
-                // Filter NFT items based on selected traits
                 let noNFTsFound = true
                 for (const nftItem of nftItems) {
                   let found = true
                   for (const trait of selectedTraits) {
                     let traitFound = false
                     for (const attribute of nftItem.attributes) {
-                      if (attribute.trait_info.trait === trait) {
+                      if (attribute.trait_info.trait === trait.trait && attribute.trait_category === trait.trait_category) {
                         traitFound = true
                         break
                       }
@@ -93,7 +95,6 @@ fetch("metadata/metadata.json")
                       break
                     }
                   }
-              
                   const nftItemEl = document.getElementById(`${nftItem.name} ${nftItem.id} nftItem`)
                   if (found) {
                     nftItemEl.style.display = "block"
@@ -105,7 +106,6 @@ fetch("metadata/metadata.json")
               
                 // If no NFTs are found with the selected traits, display a message
                 const noNFTsFoundEl = document.getElementById("noFoundNFT")
-                console.log(noNFTsFound)
                 if (noNFTsFound) {
                   noNFTsFoundEl.style.display = "block"
                 } else {
@@ -116,7 +116,7 @@ fetch("metadata/metadata.json")
               const label = document.createElement("label")
               
               label.textContent = `${attribute.trait_info.trait} (${attribute.trait_info.occurrences})`
-              label.htmlFor = `${attribute.trait_info.trait} checkbox`
+              label.htmlFor = `${attribute.trait_category} ${attribute.trait_info.trait} checkbox`
               optionDiv.appendChild(checkbox)
               optionDiv.appendChild(label)
               checkboxCategory.appendChild(optionDiv)

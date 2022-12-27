@@ -47,9 +47,15 @@ img {
 
 .traitCategoryContent {
     width: 200px;
-    padding: 20px;
+    padding: 0px;
     background: #0A101D;
     color: #BDF9A1;
+    margin-bottom: 40px;
+}
+
+.trait{
+  list-style: none;
+  margin-top: 10px;
 }
 
 .nft-info {
